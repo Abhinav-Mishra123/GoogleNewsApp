@@ -6,6 +6,8 @@ import BusinessNews from './BusinessNews';
 import Entertainment from './Entertainment';
 import Sports from './Sports';
 import Search from './Search';
+import General from './General';
+import Technology from './Technology';
 
 
 function Home({ navigation }) {
@@ -13,7 +15,7 @@ function Home({ navigation }) {
     return (
         <View>
             <FlatList
-                data={[{ key: 'top' }, { key: 'business' }, { key: 'entertainment' }, { key: 'sports' }]} // Dummy data for two sections
+                data={[{ key: 'top' }, { key: 'business' }, { key: 'entertainment' }, { key: 'sports' }, { key: 'general' },  { key: 'technology' }]} // Dummy data for two sections
                 keyExtractor={(item) => item.key}
                 renderItem={({ item }) => (
                     <View style={{ flex: 1 }}>
@@ -21,6 +23,7 @@ function Home({ navigation }) {
                         {item.key === 'business' && <BusinessNews navigation={navigation} />}
                         {item.key === 'entertainment' && <Entertainment navigation={navigation} />}
                         {item.key === 'sports' && <Sports navigation={navigation} />}
+                        {item.key === 'general' && <General navigation={navigation} />}
                     </View>
                 )}
             />

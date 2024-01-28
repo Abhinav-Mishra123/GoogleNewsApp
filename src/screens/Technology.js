@@ -1,17 +1,17 @@
 import React, { useState } from 'react'
 import { useEffect } from 'react';
 import { Text, View, Button, ScrollView, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native'
-const {api_key} = require("../api/api")
+import BlogScreen from './BlogScreen';
+import { api_key } from '../api/api';
 import { base_url } from '../api/api';
-import { useIsFocused } from '@react-navigation/native';
+import AllTechnology from './AllTechnology';
 
-function TopHeadlines({ navigation }) {
+function Technology({ navigation }) {
 
     const [latestNews, setLatesNews] = useState([])
-    const isFocused = useIsFocused()
 
     async function getLatestNews() {
-        const url = `${base_url}/top-headlines?country=us&apiKey=${api_key}`;
+        const url = `${base_url}/top-headlines&sortBy=popularity&category=technology&apiKey=${api_key}`;
         const options = {
             method: 'GET',
         };
@@ -30,16 +30,16 @@ function TopHeadlines({ navigation }) {
         const fetchData = async () => {
             try {
                 const data = await getLatestNews();
-                setLatesNews(data.articles)
+                setLatesNews(data.articles.slice(0, 10))
             } catch (error) {
                 console.error('Error fetching news:', error);
             }
         };
 
         fetchData();
-    }, [isFocused]);
+    }, []);
 
-    const renderNewsItem = ({ item, index }) => {
+    function renderNewsItem ({ item, index })  {
         if (!item.urlToImage) {
             return null
         }
@@ -79,7 +79,7 @@ function TopHeadlines({ navigation }) {
         }
     };
 
-    const formatPublishedDate = (publishedAt) => {
+    function formatPublishedDate (publishedAt) {
         const currentDate = new Date();
         const publishedDate = new Date(publishedAt);
         const timeDiff = currentDate - publishedDate;
@@ -97,48 +97,62 @@ function TopHeadlines({ navigation }) {
         }
     }
 
-    const handleBlogPress = (blogUrl) => {
+    function handleBlogPress(blogUrl) {
         navigation.navigate('BlogScreen', { blogUrl });
     };
 
 
     return (
         <>
-              {isFocused && (
-        <FlatList
-          style={{ flex: 1 }}
-          data={latestNews}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item, index }) => renderNewsItem({ item, index })}
-        />
-              )}
+            <FlatList
+                data={latestNews}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item, index }) => renderNewsItem({ item, index })}
+                ListHeaderComponent={
+                <TouchableOpacity onPress={()=> navigation.navigate("AllTechnology")} style={styles.topstories}>
+                <Text style={styles.topStoriesHeading}>Technology</Text>
+                <Image source={require('../img/right-arrow.png')} style={styles.arrowIcon}/>
+                </TouchableOpacity>
+                }
+            />
         </>
     )
 }
 
 
 const styles = StyleSheet.create({
+    topstories:{
+        display:"flex", 
+        justifyContent:"flex-start", 
+        backgroundColor:"aliceblue",
+        flexDirection:"row", 
+        alignItems:"center", 
+        alignSelf:"start",
+        height:50
+    },
+    arrowIcon:{
+        width:35,
+        height:35,
+    },
     topStoriesHeading: {
         fontSize: 20,
         fontWeight: "800",
-        color: "#000",
+        color: "#2579EE",
         paddingVertical: 4,
-        paddingHorizontal: 10,
-        marginHorizontal:10,
-        height:50,
-        textAlignVertical:"center"
+        paddingLeft:10,
+        marginLeft:10
     },
     firstNewsCard: {
-        flex: 1,
         justifyContent: 'center',
         alignItems: "center",
         alignSelf: "center",
         padding: 10,
-        shadowColor: 'aliceblue', // for iOS shadow
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
+        backgroundColor: "white",
+        shadowColor: "aliceblue",
+        elevation: 4,
+        shadowOpacity: 0.4,
         shadowRadius: 4,
-        elevation:4
+        shadowOffset: { width: 1, height: 3 }
 
     },
     firstnewsImage: {
@@ -171,7 +185,7 @@ const styles = StyleSheet.create({
         marginHorizontal:10,
         marginBottom: 16,
         elevation: 6, // for Android shadow
-        shadowColor: '#EEEAEA', // for iOS shadow
+        shadowColor: '#fff', // for iOS shadow
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 4,
@@ -209,4 +223,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default TopHeadlines
+export default Technology

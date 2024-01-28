@@ -15,13 +15,42 @@ import AllSports from '../screens/AllSports';
 import Search from '../screens/Search';
 import NewsStand from '../screens/NewsStand';
 import TopHeadlines from '../screens/TopHeadlines';
+import General from '../screens/General';
+import AllGeneral from '../screens/AllGeneral';
+import Technology from '../screens/Technology';
+import AllTechnology from '../screens/AllTechnology';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-
+// Custom header component with an image
+const CustomHeader = ({ scene }) => {
+    return (
+      <Image
+        source={require('../img/news_pulse.png')}
+        style={{
+          resizeMode: 'cover',
+        }}
+      />
+    );
+  };
 function HomeStack() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="HomeStack" options={{ headerTitle: "Sabse Tej News", headerShown:false }} component={Home} />
+      <Stack.Screen
+        name="HomeStack"
+        options={{
+            headerTitle: (props) => <CustomHeader {...props} />,
+          headerStyle: {
+            backgroundColor: 'aliceblue', // Change the background color
+          },
+          headerTintColor: '#FF5733', // Change the text color
+          headerTitleStyle: {
+            fontWeight: '700',
+            height:80,
+          },
+         
+        }}
+        component={Home}
+      />
       <Stack.Screen name="BlogScreen" options={{ title: '' }} component={BlogScreen} />
       <Stack.Screen name="BusinessNews" options={{ title: '' }} component={BusinessNews} />
       <Stack.Screen name="AllBusinessNews" options={{ title: '' }} component={AllBusinessNews} />
@@ -31,6 +60,11 @@ function HomeStack() {
       <Stack.Screen name="AllSports" options={{ title: '' }} component={AllSports} />
       <Stack.Screen name="AllTopStories" options={{ title: '' }} component={AllTopStories} />
       <Stack.Screen name='Search' options={{ title: '' }} component={Search}/>
+      <Stack.Screen name='General' options={{ title: '' }} component={General}/>
+      <Stack.Screen name='AllGeneral' options={{ title: '' }} component={AllGeneral}/>
+      <Stack.Screen name='Technology' options={{ title: '' }} component={Technology}/>
+      <Stack.Screen name='AllTechnology' options={{ title: '' }} component={AllTechnology}/>
+
 
     </Stack.Navigator>
   );
@@ -48,8 +82,8 @@ function TabNavigator() {
         
       }}>
       <Tab.Screen name="For You" options={{
-          tabBarLabel: "For You",
-          headerTitle: "Sabse Tej News",
+          headerTitle: "Abhinav Mishra News",
+          headerShown: false, // Hide the header if needed
           tabBarIcon: ({ color, size }) => (
             <Image source={require('../img/home-icon.png')} style={{ width: 24, height: 24, tintColor: color }} />
           ),
